@@ -1,1 +1,1 @@
-web: freqtrade trade
+worker: freqtrade trade
