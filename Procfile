@@ -1,1 +1,1 @@
-release: freqtrade trade
+freqtrade trade
