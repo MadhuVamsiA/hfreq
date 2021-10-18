@@ -44,6 +44,7 @@ setup(
         ],
     install_requires=[
         # from requirements.txt
+        'cachetools==4.2.2',
         'ccxt>=1.50.48',
         'SQLAlchemy',
         'python-telegram-bot>=13.4',
