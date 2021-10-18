@@ -1,1 +1,1 @@
-worker: freqtrade trade
+release: freqtrade trade
