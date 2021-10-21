@@ -83,9 +83,9 @@
       "balance_dust_level": 0.01
     },
     "api_server": {
-        "enabled": false,
+        "enabled": true,
         "listen_ip_address": "127.0.0.1",
-        "listen_port": 8080 ,
+        "listen_port": 80  ,
         "verbosity": "error",
         "enable_openapi": true,
         "jwt_secret_key": "e498ef0fb5ea00057dd83b3e95529334593807974070b25cf2fdd8efac98604f",
@@ -101,5 +101,6 @@
     },
     "strategy" : "SampleStrategyNew",
 	"trailing_stop": true,
-	"stoploss" : -0.05
+	"stoploss" : -0.03,
+	"logfile" : "from_config_log.log"
 }

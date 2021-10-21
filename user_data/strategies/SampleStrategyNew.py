@@ -45,7 +45,7 @@ class SampleStrategyNew(IStrategy):
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         print("in populate_buy_trend_maddy");
         if not (self.TGP_dict.get(metadata['pair']) and isinstance(self.TGP_dict.get(metadata['pair']), Trailing_Gain_Util)):
-            self.TGP_dict[metadata['pair']]=Trailing_Gain_Util(self.dp._exchange,metadata['pair'],logger,0.001)
+            self.TGP_dict[metadata['pair']]=Trailing_Gain_Util(self.dp._exchange,metadata['pair'],logger,0.01)
         
         
         
