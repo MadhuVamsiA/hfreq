@@ -58,7 +58,7 @@ class Trailing_Gain_Util:
                 Skips everything if self.stop_loss is already set.
             """
             new_trailing_gain_profit = (float(current_price) + float(current_price * abs(trailing_gain_profit_percent)))
-            print("new_trailing_gain_profit: ",new_trailing_gain_profit,"current_price: ",current_price);
+            #print("new_trailing_gain_profit: ",new_trailing_gain_profit,"current_price: ",current_price);
             
             if initial and (self.trailing_gain_profit is None or self.trailing_gain_profit == 0):
                 self.trailing_gain_profit=new_trailing_gain_profit;
