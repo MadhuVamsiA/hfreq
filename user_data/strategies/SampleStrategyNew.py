@@ -39,11 +39,11 @@ class SampleStrategyNew(IStrategy):
         return []
 
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("in populate_indicators_maddy");
+        #print("in populate_indicators_maddy");
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("in populate_buy_trend_maddy");
+        #print("in populate_buy_trend_maddy");
         if not (self.TGP_dict.get(metadata['pair']) and isinstance(self.TGP_dict.get(metadata['pair']), Trailing_Gain_Util)):
             self.TGP_dict[metadata['pair']]=Trailing_Gain_Util(self.dp._exchange,metadata['pair'],logger,0.01)
         
@@ -73,6 +73,6 @@ class SampleStrategyNew(IStrategy):
         return dataframe
 
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        print("in populate_sell_trend_maddy");
+        #print("in populate_sell_trend_maddy");
         dataframe['sell'] = 0
         return dataframe
