@@ -2,7 +2,11 @@
 usage:
  Trailing_Gain_Util.query.session.add(Trailing_Gain_Util)
         Trailing_Gain_Util.commit()
+
+         init_db(self.config.get('db_url', None), clean_open_orders=self.config['dry_run'])
 '''
+
+import logging
 from sqlalchemy import Column, Integer, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
@@ -12,14 +16,23 @@ from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer, S
 from sqlalchemy.orm import Query, declarative_base, relationship, scoped_session, sessionmaker
 
 
-engine = create_engine('sqlite:///tradesv3.dryrun.sqlite', echo = True)
-
+logger = logging.getLogger(__name__)
 _DECL_BASE = declarative_base()
-Base.metadata.create_all(engine)
-Trailing_Gain_Util._session = scoped_session(sessionmaker(bind=engine, autoflush=True))
-Trailing_Gain_Util.query = Trailing_Gain_Util._session.query_property()
+
+
+def init_db(db_url: str =None) -> None:
+    try:
+        engine = create_engine(db_url, echo = True)
+    except NoSuchModuleError:
+        raise OperationalException(f"Given value for db_url: '{db_url}' ")
+
+    Trailing_Gain_Util._session = scoped_session(sessionmaker(bind=engine))
+    Trailing_Gain_Util.query = Trailing_Gain_Util._session.query_property()
+    _DECL_BASE.metadata.create_all(engine)
+
 
 class Trailing_Gain_Util(_DECL_BASE):
+    __tablename__ = 'TGU'
     pair = Column(String(25), primary_key=True);
     trailing_gain_profit_percent = Column(Float, nullable=False, default=0.05);
     trailing_gain_profit = Column(Float, nullable=True, default=0);
@@ -27,15 +40,13 @@ class Trailing_Gain_Util(_DECL_BASE):
     last_seen_current_price = Column(Float, nullable=True, default=-1);
     last_seen_low_price = Column(Float, nullable=True, default=-1);
     exchange=None;
-    logger=None;
     #current_price=self.exchange.get_rate(self.pair, refresh=True, side="buy")
     #self.exchange.get_current_price(pair);
 
 
-    def __init__(self,exchange,pair,logger,trailing_gain_profit_percent:float= 0.05):
+    def __init__(self,exchange,pair,trailing_gain_profit_percent:float= 0.05):
         self.exchange=exchange;
         self.pair=pair;
-        self.logger=logger
         self.trailing_gain_profit_percent=trailing_gain_profit_percent;
         self.last_seen_current_price=self.get_current_price();
         self.adjust_gain_profit(self.get_current_price(),self.trailing_gain_profit_percent,initial=True);
@@ -48,7 +59,8 @@ class Trailing_Gain_Util(_DECL_BASE):
         else:
             return 0;
 
-    def get_buy_flag(self):
+    def get_buy_flag(self,exchange):
+        self.exchange=exchange;                      
         self.adjust_gain_profit(self.get_current_price(),self.trailing_gain_profit_percent);
         if self.trailing_gain_profit is not None and self.trailing_gain_profit < self.get_current_price():
             print(self);
@@ -71,14 +83,14 @@ class Trailing_Gain_Util(_DECL_BASE):
             if initial and (self.trailing_gain_profit is None or self.trailing_gain_profit == 0):
                 self.trailing_gain_profit=new_trailing_gain_profit;
                 self.last_seen_low_price=current_price;
-                self.logger.debug(f"{self.pair} - Assigning new trailing_gain_profit...")
+                logger.debug(f"{self.pair} - Assigning new trailing_gain_profit...")
                 return
 
 
             # evaluate if the trailing_gain_profit needs to be updated
             else:
                 if new_trailing_gain_profit < self.trailing_gain_profit:  # stop losses only walk up, never down!
-                    self.logger.debug(f"{self.pair} - Adjusting trailing_gain_profit...")
+                    logger.debug(f"{self.pair} - Adjusting trailing_gain_profit...")
                     #print(" Adjusting trailing_gain_profit")
                     self.old_trailing_gain_profit=self.trailing_gain_profit;
                     self.trailing_gain_profit=new_trailing_gain_profit;
@@ -86,10 +98,10 @@ class Trailing_Gain_Util(_DECL_BASE):
                 
             
                 else:
-                    self.logger.debug(f"{self.pair} - Keeping current trailing_gain_profit...")
+                    logger.debug(f"{self.pair} - Keeping current trailing_gain_profit...")
 
             Trailing_Gain_Util.commit()
-            self.logger.debug(
+            logger.debug(
                 f"{self.pair} - trailing_gain_profit adjusted. current_price={current_price:.8f}, "
                 f"trailing_gain_profit={self.trailing_gain_profit:.8f}. "
                 f"trailing_gain_profit helped in profit: "
