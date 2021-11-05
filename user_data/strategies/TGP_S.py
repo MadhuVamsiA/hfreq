@@ -22,7 +22,7 @@ class TGP_S(IStrategy):
     trailing_stop = True
     TGP_dict={}
     config=None;
-    _last_candle_seen_per_pair: Dict[str, datetime] = {}
+    #_last_candle_seen_per_pair: Dict[str, datetime] = {}
 
     # Optional order type mapping.
     order_types = {
@@ -42,6 +42,7 @@ class TGP_S(IStrategy):
     def __init__(self,config):
         self.config=config;
         init_db(self.config['db_url']);
+        super().__init__(config)
         
     def informative_pairs(self):
         return []
