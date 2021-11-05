@@ -102,6 +102,7 @@ class Trailing_Gain_Util(_DECL_BASE):
 
             Trailing_Gain_Util.commit()
             logger.debug(
+                f"{trailing_gain_profit_percent} -trailing_gain_profit_percent"
                 f"{self.pair} - trailing_gain_profit adjusted. current_price={current_price:.8f}, "
                 f"trailing_gain_profit={self.trailing_gain_profit:.8f}. "
                 f"trailing_gain_profit helped in profit: "
@@ -118,5 +119,9 @@ class Trailing_Gain_Util(_DECL_BASE):
     def update_tailing_gain_profit_percent(self,new_trailing_gain_profit_percent_from_config):
         self.trailing_gain_profit_percent=new_trailing_gain_profit_percent_from_config;
         self.commit();
-        
+        logger.info(
+        f"before =>{self}"
+        f"new_trailing_gain_profit_percent_from_config ={new_trailing_gain_profit_percent_from_config}"
+        f"after => {self}"
+        )
 

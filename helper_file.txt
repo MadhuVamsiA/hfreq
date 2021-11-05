@@ -11,3 +11,5 @@ iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 http://ec2-3-16-112-103.us-east-2.compute.amazonaws.com/trade
 
 python3 freqtrade/ trade -c  test_config.json  -v --logfile `date +'%Y-%m-%d_%H-%M-%S'`.log
+
+git fetch --all && git reset --hard origin/<branch_name>
