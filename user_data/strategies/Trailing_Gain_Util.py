@@ -46,7 +46,7 @@ class Trailing_Gain_Util:
             print(self);
             return True;
         else:
-            print(self);
+            #print(self);
             return False;
         
     def adjust_gain_profit(self, current_price: float, trailing_gain_profit_percent,initial: bool = False) -> None:
@@ -58,7 +58,7 @@ class Trailing_Gain_Util:
                 Skips everything if self.stop_loss is already set.
             """
             new_trailing_gain_profit = (float(current_price) + float(current_price * abs(trailing_gain_profit_percent)))
-            print("new_trailing_gain_profit: ",new_trailing_gain_profit,"current_price: ",current_price);
+            #print("new_trailing_gain_profit: ",new_trailing_gain_profit,"current_price: ",current_price);
             
             if initial and (self.trailing_gain_profit is None or self.trailing_gain_profit == 0):
                 self.trailing_gain_profit=new_trailing_gain_profit;
@@ -71,7 +71,7 @@ class Trailing_Gain_Util:
             else:
                 if new_trailing_gain_profit < self.trailing_gain_profit:  # stop losses only walk up, never down!
                     self.logger.debug(f"{self.pair} - Adjusting trailing_gain_profit...")
-                    print(" Adjusting trailing_gain_profit")
+                    #print(" Adjusting trailing_gain_profit")
                     self.old_trailing_gain_profit=self.trailing_gain_profit;
                     self.trailing_gain_profit=new_trailing_gain_profit;
                     self.last_seen_low_price=current_price;

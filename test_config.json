@@ -1,0 +1,109 @@
+{
+    "max_open_trades": 10,
+    "stake_currency": "USDT",
+    "stake_amount": 20,
+    "tradable_balance_ratio": 0.99,
+    "fiat_display_currency": "INR",
+    "timeframe": "1m",
+    "dry_run": true,
+    "cancel_open_orders_on_exit": false,
+    "unfilledtimeout": {
+        "buy": 10,
+        "sell": 30,
+        "unit": "minutes"
+    },
+    "bid_strategy": {
+        "price_side": "ask",
+        "ask_last_balance": 0.0,
+        "use_order_book": false,
+        "order_book_top": 1,
+        "check_depth_of_market": {
+            "enabled": false,
+            "bids_to_ask_delta": 1
+        }
+    },
+    "ask_strategy": {
+        "price_side": "bid",
+        "use_order_book": false,
+        "order_book_min": 1,
+        "order_book_max": 1,
+        "use_sell_signal": true,
+        "sell_profit_only": false,
+        "ignore_roi_if_buy_signal": false
+    },
+    "exchange": {
+        "name": "binance",
+        "key": "vaWgyiasUpdqWzLCrAJe7ab6nD6LfslwSEKW3yvBmYUEPvJ9rzUbJeLaCYSLc7Vw_ignore",
+        "secret": "LaFT9ZWWqBc3KrD2lh8CAKfI5Z4avzHPjPziW3oG4sPlPV2GOTxeGgZ2JFxiVkLk_ignore",
+        "ccxt_config": {"enableRateLimit": true},
+        "ccxt_async_config": {
+            "enableRateLimit": true,
+            "rateLimit": 200
+        },
+        "pair_whitelist": [
+            "XRP/USDT",
+            "SFP/USDT",
+            "BTC/USDT"
+        ],
+        "pair_blacklist": [
+        ]
+    },
+    "pairlists": [
+        {"method": "StaticPairList"}
+    ],
+    "edge": {
+        "enabled": false,
+        "process_throttle_secs": 3600,
+        "calculate_since_number_of_days": 7,
+        "allowed_risk": 0.01,
+        "stoploss_range_min": -0.01,
+        "stoploss_range_max": -0.1,
+        "stoploss_range_step": -0.01,
+        "minimum_winrate": 0.60,
+        "minimum_expectancy": 0.20,
+        "min_trade_number": 10,
+        "max_trade_duration_minute": 1440,
+        "remove_pumps": false
+    },
+    "telegram": {
+        "enabled": true,
+        "token": "2027772887:AAFh359uBM6DGMaqkTyx83ZpCKPT_GDsi_Y",
+        "chat_id": "1000098361",
+        "notification_settings": {
+             "status": "on",
+             "warning": "on",
+             "startup": "on",
+             "buy": "on",
+             "sell": "on",
+             "buy_cancel": "on",
+             "sell_cancel": "on",
+             "buy_fill": "on",
+             "sell_fill": "on"
+          },
+      "balance_dust_level": 0.01
+    },
+    "api_server": {
+        "enabled": true,
+        "listen_ip_address": "127.0.0.1",
+        "listen_port": 8080 ,
+        "verbosity": "error",
+        "enable_openapi": true,
+        "jwt_secret_key": "e498ef0fb5ea00057dd83b3e95529334593807974070b25cf2fdd8efac98604f",
+        "CORS_origins": [],
+        "username": "maddy",
+        "password": "maddy"
+    },
+    "bot_name": "freqtrade",
+    "initial_state": "running",
+    "forcebuy_enable": false,
+    "internals": {
+        "process_throttle_secs": 5
+    },
+    "strategy" : "TGP_S",
+	"trailing_stop": true,
+	"stoploss" : -0.03,
+	"logfile" : "from_config_log.log",
+    "verbosity": 3, 
+    "trailing_gain_on": true,
+    "TGP_percent" : 0.02
+}
