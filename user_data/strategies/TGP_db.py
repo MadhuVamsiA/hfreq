@@ -114,4 +114,9 @@ class Trailing_Gain_Util(_DECL_BASE):
     @staticmethod
     def commit():
         Trailing_Gain_Util.query.session.commit()
+    
+    def update_tailing_gain_profit_percent(self,new_trailing_gain_profit_percent_from_config):
+        self.trailing_gain_profit_percent=new_trailing_gain_profit_percent_from_config;
+        self.commit();
+        
 

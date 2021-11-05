@@ -59,7 +59,10 @@ class TGP_S(IStrategy):
                 Trailing_Gain_Util.query.session.add(tgu_obj);
                 Trailing_Gain_Util.commit();
 
-
+            #to handle reload config from telegram
+            if not (tgu_obj.trailing_gain_profit_percent == self.config.get('TGP_percent')):
+                tgu_obj.update_tailing_gain_profit_percent(self.config.get('TGP_percent'));
+                
             if tgu_obj.get_buy_flag(self.dp._exchange):
                 dataframe['tgp_buy']=True;
                 dataframe.loc[
