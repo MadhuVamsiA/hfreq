@@ -13,3 +13,33 @@ http://ec2-3-16-112-103.us-east-2.compute.amazonaws.com/trade
 python3 freqtrade/ trade -c  test_config.json  -v --logfile `date +'%Y-%m-%d_%H-%M-%S'`.log
 
 git fetch --all && git reset --hard origin/<branch_name>
+
+
+ Trade.query.filter(Trade.sell_order_status.isnot(None)).all()[0].sell_order_status
+'closed'
+
+IPdb [35]: Trade.query.filter(Trade.sell_order_status=='closed').all()[0].sell_order_status
+'closed'
+
+
+IPdb [38]: Trade.query.filter(Trade.sell_order_status=='closed' and Trade.sell_reason=='stop_loss' ).all()[0].sell_order_status
+
+
+Trade.query.filter(Trade.sell_order_status=='closed' and Trade.sell_reason=='stop_loss' and pair=='XRP/USDT').all()[0].sell_order_status
+
+ sqlite3 -column -header
+
+
+SQLite version 3.35.4 2021-04-02 15:20:15
+Enter ".help" for usage hints.
+sqlite>
+sqlite> .open "tradesv3.dryrun.sqlite"
+sqlite> .databases
+main: /home/ubuntu/codes/hfreq/tradesv3.dryrun.sqlite r/w
+sqlite> .tables
+TGU        orders     pairlocks  trades
+
+
+freqtrade backtesting --strategy TGP_S_BT --dry-run-wallet 1000 --timeframe 1m  --config no_loss_config.json
+
+freqtrade download-data --exchange binance --pairs UMA/USDT -t 1m  20211107-
