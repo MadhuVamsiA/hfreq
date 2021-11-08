@@ -1,0 +1,108 @@
+{
+    "max_open_trades": 1,
+    "stake_currency": "USDT",
+    "stake_amount": "unlimited",
+    "tradable_balance_ratio": 0.99,
+    "fiat_display_currency": "INR",
+    "timeframe": "1m",
+    "dry_run": true,
+    "cancel_open_orders_on_exit": true,
+    "unfilledtimeout": {
+        "buy": 10,
+        "sell": 30,
+        "unit": "minutes"
+    },
+    "bid_strategy": {
+        "price_side": "ask",
+        "ask_last_balance": 0.0,
+        "use_order_book": false,
+        "order_book_top": 1,
+        "check_depth_of_market": {
+            "enabled": false,
+            "bids_to_ask_delta": 1
+        }
+    },
+    "ask_strategy": {
+        "price_side": "bid",
+        "use_order_book": false,
+        "order_book_min": 1,
+        "order_book_max": 1,
+        "use_sell_signal": true,
+        "sell_profit_only": false,
+        "ignore_roi_if_buy_signal": false
+    },
+    "exchange": {
+        "name": "binance",
+        "key": "vaWgyiasUpdqWzLCrAJe7ab6nD6LfslwSEKW3yvBmYUEPvJ9rzUbJeLaCYSLc7Vw_ignore",
+        "secret": "LaFT9ZWWqBc3KrD2lh8CAKfI5Z4avzHPjPziW3oG4sPlPV2GOTxeGgZ2JFxiVkLk_ignore",
+        "ccxt_config": {"enableRateLimit": true},
+        "ccxt_async_config": {
+            "enableRateLimit": true,
+            "rateLimit": 200
+        },
+        "pair_whitelist": [
+			"SFP/USDT"
+        ],
+        "pair_blacklist": [
+        ]
+    },
+    "pairlists": [
+        {"method": "StaticPairList"}
+    ],
+
+    "telegram": {
+        "enabled": true,
+        "token": "1683002336:AAHTzhZRyobYGRLr9GIEKnCaB5T_E8-J6Bg",
+        "chat_id": "1000098361",
+        "notification_settings": {
+             "status": "on",
+             "warning": "on",
+             "startup": "on",
+             "buy": "on",
+             "sell": "on",
+             "buy_cancel": "on",
+             "sell_cancel": "on",
+             "buy_fill": "on",
+             "sell_fill": "on"
+          },
+      "balance_dust_level": 0.01
+    },
+    "api_server": {
+        "enabled": true,
+        "listen_ip_address": "127.0.0.1",
+        "listen_port": 8080 ,
+        "verbosity": "error",
+        "enable_openapi": true,
+        "jwt_secret_key": "e498ef0fb5ea00057dd83b3e95529334593807974070b25cf2fdd8efac98604f",
+        "CORS_origins": [],
+        "username": "maddy",
+        "password": "maddy"
+    },
+    "bot_name": "Maddy_Crypto_NL_cfg",
+    "initial_state": "running",
+    "forcebuy_enable": false,
+    "internals": {
+        "process_throttle_secs": 5
+    },
+    "strategy" : "TGP_S",
+	"trailing_stop": true,
+	"stoploss" : -0.5,
+	"trailing_stop_positive" : 0.03,
+    "trailing_stop_positive_offset" : 0.04,
+    "trailing_only_offset_is_reached" : true,
+	"logfile" : "No_loss_config.log",
+    "verbosity": 3, 
+    "trailing_gain_on": true,
+    "TGP_percent" : 0.05,
+	"order_types": {
+		"buy": "market",
+		"sell": "market",
+		"stoploss": "market",
+		"stoploss_on_exchange": false
+		},
+	"order_time_in_force": {"buy": "gtc", "sell": "gtc"},
+	"dry_run_wallet": 1000,
+	"strict_loss_to_trailing":true,
+	"db_url":"sqlite:///trades_N.dryrun.sqlite",
+	"is_BackTesting":true
+}
