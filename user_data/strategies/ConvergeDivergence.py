@@ -16,7 +16,8 @@ class ConvergeDivergence(IStrategy):
     stoploss = -0.10
     trailing_stop = True
     no_of_candles_to_con_div =10;
-
+    #which_to_check='body'
+    which_to_check='wick top'
 
     # Optional order type mapping.
     order_types = {
@@ -33,7 +34,10 @@ class ConvergeDivergence(IStrategy):
     }
     
     def categorise(self,row):
-        return max(row['open'],row['close'])
+        if self.which_to_check=='body':
+            return max(row['open'],row['close'])
+        else:
+            return row['high']
 	
     def diverge_converge(self,row):
         return (row['top']-row['old_top'])
@@ -47,6 +51,12 @@ class ConvergeDivergence(IStrategy):
     def per_in_cal(self,row):
         if row['old_rsi']:
             return (abs(row['rsi_mov']/row['old_rsi']*100))
+        else:
+            return 0
+        
+    def per_in_cal_prc(self,row):
+        if row['old_rsi']:
+            return (abs(row['div_conv']/row['old_top']*100))
         else:
             return 0
     
@@ -95,6 +105,7 @@ class ConvergeDivergence(IStrategy):
         dataframe['old_top']=dataframe['top'].shift(self.no_of_candles_to_con_div)
         dataframe['div_conv'] = dataframe.apply(lambda row: self.diverge_converge(row), axis=1)
         dataframe['per_inc'] =dataframe.apply(lambda row: self.per_in_cal(row), axis=1)
+        dataframe['per_inc_prc'] =dataframe.apply(lambda row: self.per_in_cal_prc(row), axis=1)
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -103,7 +114,7 @@ class ConvergeDivergence(IStrategy):
             (
                 (
                     dataframe['div_conv'] > 0) & (dataframe['rsi_mov'] < 0)
-                    & (dataframe['per_inc'] > 10)
+                    & (dataframe['per_inc'] > 10) & (dataframe['per_inc_prc'] > 10)
                 )
             ,'buy'] = 1;
         return dataframe
