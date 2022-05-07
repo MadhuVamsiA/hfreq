@@ -15,7 +15,7 @@ class ConvergeDivergence(IStrategy):
     INTERFACE_VERSION = 2
     stoploss = -0.10
     trailing_stop = True
-    no_of_candles_to_con_div =10;
+    no_of_candles_to_con_div =5;
     #which_to_check='body'
     which_to_check='wick top'
 
@@ -106,6 +106,8 @@ class ConvergeDivergence(IStrategy):
         dataframe['div_conv'] = dataframe.apply(lambda row: self.diverge_converge(row), axis=1)
         dataframe['per_inc'] =dataframe.apply(lambda row: self.per_in_cal(row), axis=1)
         dataframe['per_inc_prc'] =dataframe.apply(lambda row: self.per_in_cal_prc(row), axis=1)
+        dataframe['moun_line_cross']=(dataframe['top'].rolling(self.no_of_candles_to_con_div).max() <= dataframe['top'])
+        dataframe['mount_max']=dataframe['top'].rolling(self.no_of_candles_to_con_div).max()
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -114,9 +116,12 @@ class ConvergeDivergence(IStrategy):
             (
                 (
                     dataframe['div_conv'] > 0) & (dataframe['rsi_mov'] < 0)
-                    & (dataframe['per_inc'] > 10) & (dataframe['per_inc_prc'] > 10)
+                    #& (dataframe['per_inc'] >= 20) & (dataframe['per_inc_prc'] >= 5)
+                    & (dataframe['moun_line_cross'] == True)
                 )
             ,'buy'] = 1;
+
+        
         return dataframe
 
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
@@ -124,7 +129,7 @@ class ConvergeDivergence(IStrategy):
         dataframe.loc[
         (
             (dataframe['div_conv'] < 0) &  (dataframe['rsi_mov'] > 0) 
-            & (dataframe['per_inc'] > 10)# Make sure Volume is not 0
+            & (dataframe['per_inc'] > 1000)# Make sure Volume is not 0
         ),
         'sell'] = 1;
         return dataframe
