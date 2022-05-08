@@ -157,11 +157,14 @@ class ConvergeDivergenceArb(IStrategy):
 
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         #print("in populate_sell_trend_maddy");
+        '''
         dataframe.loc[
         (
-            #(dataframe['div_conv'] < 0) &  (dataframe['rsi_mov'] > 0) 
-            #& (dataframe['per_inc'] > 1000)# Make sure Volume is not 0
+            (dataframe['div_conv'] < 0) &  (dataframe['rsi_mov'] > 0) 
+            & (dataframe['per_inc'] > 1000)# Make sure Volume is not 0
             10>20
         ),
         'sell'] = 0;
+        '''
+        dataframe['sell'] = np.nan;
         return dataframe
