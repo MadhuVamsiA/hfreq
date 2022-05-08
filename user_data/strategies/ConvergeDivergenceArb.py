@@ -104,9 +104,17 @@ class ConvergeDivergenceArb(IStrategy):
         rsi = np.where(up == 0, 0, np.where(down == 0, 100, 100 - (100 / (1 + up / down))))
     
         return np.round(rsi, 2) if round_rsi else rsi
-
+    '''
+    def rsi_filter_mountain(self,row,no_of_candles_to_con_div):
+        if row['p_rsi'+'_'+str(no_of_candles_to_con_div)] < row['rsi']:
+            return (abs(row['div_conv'+'_'+str(no_of_candles_to_con_div)]/row['old_top'+'_'+str(no_of_candles_to_con_div)]*100))
+        else:
+            return 0
+    '''
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         dataframe['rsi'] = self.rsi_tradingview(dataframe)
+        dataframe['p_rsi']=dataframe['rsi'].shift(1)
+        dataframe['rr']=dataframe['rsi']>dataframe['p_rsi']
         for no_of_candles_to_con_div in range(self.no_of_candles_to_con_div_min,self.no_of_candles_to_con_div_max):
             dataframe['old_rsi'+'_'+str(no_of_candles_to_con_div)]=dataframe['rsi'].shift(no_of_candles_to_con_div)
             dataframe['rsi_mov'+'_'+str(no_of_candles_to_con_div)] = dataframe.apply(lambda row: self.rsi_mov_ind(row,no_of_candles_to_con_div), axis=1)
@@ -139,17 +147,18 @@ class ConvergeDivergenceArb(IStrategy):
         for no_of_candles_to_con_div in range(self.no_of_candles_to_con_div_min,self.no_of_candles_to_con_div_max):
             dataframe.loc[
                 (
-                    (   
-                        dataframe['div_conv'+'_'+str(no_of_candles_to_con_div)] > 0) & (dataframe['rsi_mov'+'_'+str(no_of_candles_to_con_div)] < 0)
+                        (dataframe['div_conv'+'_'+str(no_of_candles_to_con_div)] > 0) & (dataframe['rsi_mov'+'_'+str(no_of_candles_to_con_div)] < 0)
                         & (dataframe['per_inc'+'_'+str(no_of_candles_to_con_div)] >= 1) & (dataframe['per_inc_prc'+'_'+str(no_of_candles_to_con_div)] >= 1)
-                        & (dataframe['moun_line_cross'+'_'+str(no_of_candles_to_con_div)] == True
-                    )
+                        & (dataframe['moun_line_cross'+'_'+str(no_of_candles_to_con_div)] == True)
+                        & (dataframe['rr']==True)
                 )
                 ,'buy'+'_'+str(no_of_candles_to_con_div)] = 1;
             if no_of_candles_to_con_div==self.no_of_candles_to_con_div_min:
                 dataframe.loc[dataframe['buy'+'_'+str(no_of_candles_to_con_div)]==1,'buy_tag'] = '_len'+'_'+str(no_of_candles_to_con_div);
             else:
                 dataframe.loc[dataframe['buy'+'_'+str(no_of_candles_to_con_div)]==1,'buy_tag'] = dataframe['buy_tag']+'_len'+'_'+str(no_of_candles_to_con_div);
+        
+        dataframe.loc[dataframe['buy_tag'].notnull(),'buy'] =1;
         
         self.final_df=dataframe.loc[dataframe['buy_tag'].notnull()][['date','buy_tag']]
         self.final_df['pair']=metadata['pair']
@@ -158,6 +167,7 @@ class ConvergeDivergenceArb(IStrategy):
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
         #print("in populate_sell_trend_maddy");
         '''
+        #debug: dd=dataframe[['date','buy_tag','rsi','p_rsi','high','rr']]
         dataframe.loc[
         (
             (dataframe['div_conv'] < 0) &  (dataframe['rsi_mov'] > 0) 
