@@ -41,7 +41,11 @@
             "rateLimit": 200
         },
         "pair_whitelist": [
-            "BTC/USDT"
+            "ADA/USDT",
+			"LUNA/USDT",
+			"BNB/USDT",
+			"MATIC/USDT",
+			"ETH/USDT"
         ],
         "pair_blacklist": [
         ]
@@ -97,7 +101,7 @@
     "internals": {
         "process_throttle_secs": 5
     },
-    "strategy" : "ConvergeDivergence",
+    "strategy" : "ConvergeDivergenceArb",
 	"trailing_stop": true,
 	"stoploss" : -0.02,
 	"logfile" : "from_config_log.log"
