@@ -114,13 +114,15 @@ class ConvergeDivergence(IStrategy):
         #print("in populate_buy_trend_maddy");
         dataframe.loc[
             (
-                (
+                (   
                     dataframe['div_conv'] > 0) & (dataframe['rsi_mov'] < 0)
-                    #& (dataframe['per_inc'] >= 20) & (dataframe['per_inc_prc'] >= 5)
-                    & (dataframe['moun_line_cross'] == True)
+                    & (dataframe['per_inc'] >= 1) & (dataframe['per_inc_prc'] >= 1)
+                    & (dataframe['moun_line_cross'] == True
                 )
+            )
             ,'buy'] = 1;
-
+        
+        dataframe.loc[dataframe['buy']==1,'buy_tag'] = 'div';
         
         return dataframe
 
@@ -131,5 +133,5 @@ class ConvergeDivergence(IStrategy):
             (dataframe['div_conv'] < 0) &  (dataframe['rsi_mov'] > 0) 
             & (dataframe['per_inc'] > 1000)# Make sure Volume is not 0
         ),
-        'sell'] = 1;
+        'sell'] = 0;
         return dataframe

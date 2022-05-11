@@ -23,8 +23,8 @@ class ConvergeDivergenceArb(IStrategy):
     stoploss = -0.10
     trailing_stop = True
     no_of_candles_to_con_div =5;
-    no_of_candles_to_con_div_min =5;
-    no_of_candles_to_con_div_max =15;
+    no_of_candles_to_con_div_min =3;
+    no_of_candles_to_con_div_max =26;
     #which_to_check='body'
     which_to_check='wick top'
     final_df= pd.DataFrame()
@@ -112,6 +112,7 @@ class ConvergeDivergenceArb(IStrategy):
             return 0
     '''
     def populate_indicators(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
+        dataframe=dataframe.sort_values(by='date',ascending=False).head(self.no_of_candles_to_con_div_max+50)
         dataframe['rsi'] = self.rsi_tradingview(dataframe)
         dataframe['p_rsi']=dataframe['rsi'].shift(1)
         dataframe['rr']=dataframe['rsi']>dataframe['p_rsi']
@@ -128,7 +129,7 @@ class ConvergeDivergenceArb(IStrategy):
         return dataframe
 
     def populate_indicators2(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        #print("in populate_indicators_maddy");
+        print("in populate_indicators_maddy");
         #dataframe['rsi'] = ta.RSI(dataframe['close'], timeperiod=14)
         dataframe['rsi'] = self.rsi_tradingview(dataframe)
         dataframe['old_rsi']=dataframe['rsi'].shift(self.no_of_candles_to_con_div)
@@ -143,7 +144,7 @@ class ConvergeDivergenceArb(IStrategy):
         return dataframe
 
     def populate_buy_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:
-        #print("in populate_buy_trend_maddy");
+        print("in populate_buy_trend_maddy");
         for no_of_candles_to_con_div in range(self.no_of_candles_to_con_div_min,self.no_of_candles_to_con_div_max):
             dataframe.loc[
                 (
@@ -162,6 +163,7 @@ class ConvergeDivergenceArb(IStrategy):
         
         self.final_df=dataframe.loc[dataframe['buy_tag'].notnull()][['date','buy_tag']]
         self.final_df['pair']=metadata['pair']
+        logger.info(self.final_df.sort_values(by='date',ascending=False).iloc[0:1])
         return dataframe
 
     def populate_sell_trend(self, dataframe: DataFrame, metadata: dict) -> DataFrame:

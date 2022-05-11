@@ -32,7 +32,7 @@ def init_db(db_url: str =None) -> None:
 
 
 class Trailing_Gain_Util(_DECL_BASE):
-    __tablename__ = 'TGU'
+    __tablename__ = 'TGU_db_backtest'
     pair = Column(String(25), primary_key=True);
     trailing_gain_profit_percent = Column(Float, nullable=False, default=0.05);
     trailing_gain_profit = Column(Float, nullable=True, default=0);
