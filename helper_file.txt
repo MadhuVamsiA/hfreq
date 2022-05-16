@@ -47,3 +47,6 @@ freqtrade download-data --exchange binance --pairs UMA/USDT -t 1m --timerange 20
 
 
 GMX - ssh - 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
+
+new: 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
+(may 16 2022)
