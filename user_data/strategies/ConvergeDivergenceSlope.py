@@ -10,9 +10,6 @@ class ConvergeDivergenceSlope(IStrategy):
     INTERFACE_VERSION = 2
     stoploss = -0.10
     trailing_stop = True
-    no_of_candles_to_con_div = 5
-    no_of_candles_to_con_div_min = 3
-    no_of_candles_to_con_div_max = 30
     # which_to_check='body'
     which_to_check = 'wick top'
     final_df = pd.DataFrame()
@@ -30,6 +27,11 @@ class ConvergeDivergenceSlope(IStrategy):
         'buy': 'gtc',
         'sell': 'gtc'
     }
+
+    def __init__(self, config):
+        super().__init__(config)
+        self.no_of_candles_to_con_div_min = config.get('no_of_candles_to_con_div_min', 3)
+        self.no_of_candles_to_con_div_max = config.get('no_of_candles_to_con_div_max', 30)
 
     def categorise(self, row):
         if self.which_to_check == 'body':
