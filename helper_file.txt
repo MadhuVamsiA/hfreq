@@ -13,3 +13,6 @@ http://ec2-3-16-112-103.us-east-2.compute.amazonaws.com/trade
 python3 freqtrade/ trade -c  test_config.json  -v --logfile `date +'%Y-%m-%d_%H-%M-%S'`.log
 
 git fetch --all && git reset --hard origin/<branch_name>
+
+code: DhglBWuAQg7MiJaZr2peY2Ddio+BOVLUsnM3S6R8C61EbcKHxlilUVrrxGn6kPMfH11bAGXIXKyWXqwJRRo77A==
+https://www.online-toolz.com/tools/text-encryption-decryption.php
